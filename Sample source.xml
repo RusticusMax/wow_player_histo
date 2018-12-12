@@ -1,0 +1,64 @@
+﻿
+<div class="SortTable-row">
+  <div data-value='1' class="SortTable-col SortTable-data align-center text-nowrap">
+    1
+  </div>
+  <div data-value="Smexxin" class="SortTable-col SortTable-data font-none">
+    <a href="/en-us/character/tichondrius/smexxin" class="Link Character Character--WARRIOR Character--avatar Character--small Character--square Character--onDark">
+      <div class="Character-table">
+        <div class="Character-bust">
+          <div style="" class="Art Art--above">
+            <div style="padding-top:50.43478260869565%" class="Art-size">
+            </div>
+            <div style="background-image:url(https://render-us.worldofwarcraft.com/character/tichondrius/22/175651862-inset.jpg)" class="Art-image">
+            </div>
+            <div class="Art-overlay">
+            </div>
+          </div>
+        </div>
+        <div class="Character-avatar">
+          <div class="Avatar Avatar--medium">
+            <div style="background-image:url(&quot;https://render-us.worldofwarcraft.com/character/tichondrius/22/175651862-avatar.jpg&quot;)" class="Avatar-image">
+            </div>
+          </div>
+        </div>
+        <div class="Character-details">
+          <div class="Character-role">
+          </div>
+          <div class="Character-name">
+            Smexxin
+          </div>
+          <div class="Character-level">
+            <b>
+              110
+            </b> 
+            Arms Warrior
+          </div>
+          <div class="Character-realm">
+            Tichondrius
+          </div>
+        </div>
+      </div>
+    </a>  
+  </div>
+  <div class="SortTable-col SortTable-data text-nowrap align-left">
+    Tichondrius
+  </div>
+  <div data-value="HORDE" class="SortTable-col SortTable-data font-none align-center">
+    <span class="Icon Icon--horde Icon--medium">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 64 64" class="Icon-svg">
+        <use xlink:href="/static/components/Icon/Icon.svg#horde">
+        </use>
+      </svg>
+    </span>
+  </div>
+  <div class="SortTable-col SortTable-data text-nowrap align-center color-status-success">
+    160
+  </div>
+  <div class="SortTable-col SortTable-data text-nowrap align-center color-status-error">
+    24
+  </div>
+  <div class="SortTable-col SortTable-data text-nowrap align-center color-status-warning">
+    2781
+  </div>
+</div>

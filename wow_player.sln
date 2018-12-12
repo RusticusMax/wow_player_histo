@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "pvp_player_histo", "pvp_player_histo.pyproj", "{39FAAE20-6BB1-4AE1-8CD4-58AF899BB0AC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E124E304-5304-4299-96B1-994A28CD596C}"
+	ProjectSection(SolutionItems) = preProject
+		Sample source.xml = Sample source.xml
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{39FAAE20-6BB1-4AE1-8CD4-58AF899BB0AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39FAAE20-6BB1-4AE1-8CD4-58AF899BB0AC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
