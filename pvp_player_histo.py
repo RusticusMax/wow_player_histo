@@ -2,6 +2,7 @@ from lxml import html
 import requests
 import sys  # contains stderr object for debug output
 
+# Changed remote repo name: "git remote set-url origin 'https://RusticusMax@bitbucket.org/RusticusMax/wow_player_histo.git'"
 # Variables 
 # Debug flag.  Set to non zero for debug
 DEBUG_OUT=1          
