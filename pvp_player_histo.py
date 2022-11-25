@@ -31,7 +31,7 @@ class_list = { " Windwalker Monk":0,        " Holy Paladin":0,          " Frost 
                " Beast Mastery Hunter":0,   " Protection Warrior":0,    " Blood Death Knight":0,
                " Vengeance Demon Hunter":0, " Fury Warrior":0,          " Brewmaster Monk":0}
 
-# todo:    create cleaa list objects to better handle paralle arrays 
+# todo:    create clear list objects to better handle paralle arrays
  
 # create an array of dictionaries for histogram data
 # copy each (so we don't end up with an array of references) class_list dictionary for each histo bar
