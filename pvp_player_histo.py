@@ -81,10 +81,10 @@ while player_current <  PLAYER_MAX:
 if(DEBUG_OUT):
     print("player count", player_current)
 
-# Sort by counts and print highest to lowest
+# Sort by class counts and print highest to lowest
 for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[class_str], reverse=True):
     if(class_list[class_item] > 0):
-        print(class_list[class_item], "\t", class_item)
+        print(class_list[class_item], ",", class_item)
 
 # Dump histogram data
 # creat list of top n classes
@@ -94,10 +94,10 @@ for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[cla
         histo_top_classes.append(class_item) 
 
 # header (may need to sort to ensure each dictionary is ordered the same,  atm each run has differnt order, but same for each dictionary in any run)
-print("Rank", '\t', end='')
+print("Rank", ',', end='')
 # for histo_item in histo_buckets[0]:
 for histo_item in histo_top_classes:
-    print(histo_item, '\t', end='')
+    print(histo_item, ',', end='')
 print()
 
 # Print actual histogram data
