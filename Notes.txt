@@ -1,0 +1,12 @@
+
+
+need:
+read page? (scrape page from web)
+
+extract team (M+):  5 Players and roles (later to be generalized to raid teams
+
+Extract pvp rank data
+
+extract player data:  Given URL, or player name and server, return parsed player data (equipment, spec(s), etc)
+
+
