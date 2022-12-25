@@ -39,6 +39,10 @@ class_list = { " Windwalker Monk":0,        " Holy Paladin":0,          " Frost 
                " Preservation Evoker":0,    " Devastation Evoker":0,
                }
 
+def extract_role(class_str):
+    x = class_str[26:].find(' ')
+    return "(" + class_str[26:x+26] + ")"
+
 page = requests.get(
     'https://worldofwarcraft.com/en-us/game/pve/leaderboards/gorefiend/algethar-academy')  # slurp page from internet
 tree = html.fromstring(page.content)
@@ -55,7 +59,8 @@ tanks = tree.xpath('//*[@id="main"]/div[5]/div[2]/div/div[2]/div/div/div/div[2]/
 print("players, roles, teams")
 print(len(players), len(roles), len(teams), len(tanks))
 for i in range(0, len(tanks)):
-    print(tanks[i].attrib['class'])
+    # print(tanks[i].attrib['class'])
+    print(extract_role(tanks[i].attrib['class']))
     # print("((", roles[i].attrib['class'], "))")
 # print("((", roles[54].attrib['xlink:href'], "))")
 # print(players[0])
@@ -68,3 +73,4 @@ for i in range(0, len(tanks)):
 #     print("")
 #     for j in range(0, 5):
 #         print(players[i+j], realms[i+j], " -- ", end='')
+
