@@ -15,6 +15,8 @@
 from lxml import html
 import requests
 import sys  # contains stderr object for debug output
+import player
+
 
 # Changed remote repo name: "git remote set-url origin 'https://RusticusMax@bitbucket.org/RusticusMax/wow_player_histo.git'"
 # Variables
@@ -62,6 +64,8 @@ for i in range(0, len(tanks)):
     # print(tanks[i].attrib['class'])
     print(extract_role(tanks[i].attrib['class']))
     # print("((", roles[i].attrib['class'], "))")
+
+test_player = player.Player('https://worldofwarcraft.com/en-us/character/us/bleeding-hollow/drblank')
 # print("((", roles[54].attrib['xlink:href'], "))")
 # print(players[0])
 #
