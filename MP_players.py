@@ -56,7 +56,6 @@ players = tree.xpath('//div[@class="Character-name"]/text()')
 realms = tree.xpath('//div[@class="Character-realm"]/text()')
 teams = tree.xpath('//div[@class="SortTable-row"]')
 tanks = tree.xpath('//*[@id="main"]/div[5]/div[2]/div/div[2]/div/div/div/div[2]/div[*]/div[4]/div/div[*]/a')
-# Nope not this - tanks = tree.xpath('//div[@class="SortTable-row"]/use')
 
 print("players, roles, teams")
 print(len(players), len(roles), len(teams), len(tanks))
