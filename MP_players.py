@@ -64,7 +64,9 @@ for i in range(0, len(tanks)):
     print(extract_role(tanks[i].attrib['class']))
     # print("((", roles[i].attrib['class'], "))")
 
-test_player = player.Player('https://worldofwarcraft.com/en-us/character/us/bleeding-hollow/drblank')
+test_player = player.Player('https://worldofwarcraft.com/en-us/character/us/Gorefiend/Rustymax')
+#test_player = player.Player('https://worldofwarcraft.com/en-us/character/us/bleeding-hollow/drblank')
+
 # print("((", roles[54].attrib['xlink:href'], "))")
 # print(players[0])
 #
