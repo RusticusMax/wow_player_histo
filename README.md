@@ -4,7 +4,7 @@ Three separate apps for processing Blizzard player data.  Really needs to be rew
 
 pvp_player_histo.py
 - Status: (scraping web) Working
-- Purpose: Create a CSV read list of top pvp players/  Useful for determining which specs are the most popular.
+- Purpose: Create a CSV ready list of top pvp players/  Useful for determining which specs are the most popular.
 - TO DO:
 1) Embed plotting (interactive) directly in app
 
