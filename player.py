@@ -26,6 +26,7 @@ class Player:
         p_name = driver.find_element_by_xpath('//*[@id="character-profile-mount"]/div/div/div[2]/div/div[1]/div[1]/div/div[1]/div[2]/div/a')
         p_title = driver.find_element_by_xpath('//meta[@name="description"]')
         p_spec = driver.find_element_by_xpath('//*[@class="CharacterHeader-detail"]/span[3]')
+        p_ivl = driver.find_element_by_xpath('//*[@id="character-profile-mount"]/div/div/div[2]/div/div[1]/div[1]/div/div[2]/div[1]/a[2]/div/div[2]')
 
         pass
 
@@ -38,4 +39,4 @@ class Player:
         #p_title = p_tree.xpath('//meta[@name="description"]')
         #p_name = p_tree.xpath('//*[@id="character-profile-mount"]/div/div/div[2]/div/div[1]/div[1]/div/div[1]/div[2]/div/a')
         #p_spec = p_tree.xpath('//*[@class="CharacterHeader-detail"]/span[3]')
-        print(p_name.text, p_spec.text, len(p_title.text))
+        print(p_name.text, p_spec.text, len(p_title.text), p_ivl.text)
