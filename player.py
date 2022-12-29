@@ -20,9 +20,9 @@ class Player:
         op = webdriver.ChromeOptions()
         op.add_argument('--headless')
         driver = webdriver.Chrome('C:\\Program Files (x86)\\Goggle-ChromeDriver\\chromedriver.exe', options=op)
-        #element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "myDynamicElement"))
-        driver.get(URL);
-        # time.sleep(5)
+        driver.get(URL)
+        element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "character-profile-mount")))
+        # time.sleep(1)
         p_name = driver.find_element_by_xpath('//*[@id="character-profile-mount"]/div/div/div[2]/div/div[1]/div[1]/div/div[1]/div[2]/div/a')
         p_title = driver.find_element_by_xpath('//meta[@name="description"]')
         p_spec = driver.find_element_by_xpath('//*[@class="CharacterHeader-detail"]/span[3]')
