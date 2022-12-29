@@ -1,5 +1,3 @@
-Moved this to readme.md
-
 Purpose:
 
 Three separate apps for processing Blizzard player data.  Really needs to be rewritten to use Blizzard APIs where possible
