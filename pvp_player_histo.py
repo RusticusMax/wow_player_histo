@@ -5,7 +5,9 @@ import sys  # contains stderr object for debug output
 # Changed remote repo name: "git remote set-url origin 'https://RusticusMax@bitbucket.org/RusticusMax/wow_player_histo.git'"
 # Variables 
 # Debug flag.  Set to non zero for debug
-DEBUG_OUT=1          
+DEBUG_OUT=1
+# Number of blank pages (no data) to allow.  1 should really be sufficient
+BLANK_PAGE_CNT=5
 # Number of players to process
 PLAYER_MAX=500   
 # number of histogram bars
@@ -53,9 +55,14 @@ while player_current <  PLAYER_MAX:
     realms = tree.xpath('//div[@class="Character-realm"]/text()')
     player_class = tree.xpath('//div[@class="Character-level"]/text()')   # How does this  extract the actual name, and not also the level number?
 
-    # did we get data?  If not skip. 
-    # CODE - need to check for infinite empty pages.  What if we never get xpath data?)
+    # did we get data?  If not skip. But track number of fail and exit if reached limit (BLANK_PAGE_CNT)
     if(len(players) == 0):
+        # if we reached the allowed blank page count exit with error
+        if(BLANK_PAGE_CNT <= 0):
+            print("BLANK_PAGE_CNT reached limit.  Exiting")
+            exit(1)
+        else:
+            BLANK_PAGE_CNT -= 1
         break
     # for each element of data on this page process it.
     for i in range(0, len(players)):
