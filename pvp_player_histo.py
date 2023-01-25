@@ -42,13 +42,14 @@ class_list = { " Windwalker Monk":0,        " Holy Paladin":0,          " Frost 
 
 # todo:    create clear list objects to better handle paralle arrays
 
+# Module level variable are always treated as constants, tell pylint to ignore const case requirement for the following
+# pylint: disable=C0103
 # create an array of dictionaries for histogram data
 # copy each (so we don't end up with an array of references) class_list dictionary for each histo bar
 histo_buckets = [class_list.copy() for x in range(HISTO_BAR_COUNT)]
-
 player_current = 0  # init current player counter so we will know when to stop
 page_count = 1  # So we can request the right page of data from web site, since we have to do it a page at a time.
-
+# pylint: enable=C0103
 
 # Read in a page and loop through all entries on the page and update counts
 while player_current < PLAYER_MAX:
@@ -86,6 +87,10 @@ while player_current < PLAYER_MAX:
             if DEBUG_OUT:
                 try:
                     print(player_current, players[i], safe_realm, '[' + i_player_class + ']', file=sys.stderr)
+                except UnicodeError as e:
+                    print()
+                    print("Unicode Error on print")
+                    sys.exit(2)
                 except Exception as e:
                     oops = e
             class_list[i_player_class] += 1
@@ -109,7 +114,7 @@ for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[cla
     if len(histo_top_classes) < HISTO_TOP_X:
         histo_top_classes.append(class_item)
 
-# header (may need to sort to ensure each dictionary is ordered the same
+# header (may need to sort to ensure each dictionary is ordered the same)
 # ATM each run has differnt order, but same for each dictionary in any run)
 print("Rank", ',', end='')
 # for histo_item in histo_buckets[0]:
@@ -118,12 +123,10 @@ for histo_item in histo_top_classes:
 print()
 
 # Print actual histogram data
-# Hist range is the ending rank of the current hist bucket range.    0-20,  21,40
-histo_range = HISTO_WIDTH
-# for each dictionary in the arry process that batch of counts
-for histo_bar in histo_buckets:
-    print(histo_range-HISTO_WIDTH+1, " ", histo_range, ',', end='')
+# for each dictionary in the array process that batch of counts
+for i, histo_bar in enumerate(histo_buckets):
+    # Print left legend for bucket ranges (e.g. 0-20, 21-40, etc)
+    print((i * HISTO_WIDTH) + 1, " ", (i + 1) * HISTO_WIDTH, ',', end='')
     for histo_item in histo_top_classes:
         print(histo_bar[histo_item],  ',', end='')
-    print() # end of line
-    histo_range += HISTO_WIDTH  # go to the next histogram range
+    print()     # end of line
