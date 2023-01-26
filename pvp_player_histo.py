@@ -4,7 +4,8 @@ Scrape Wow pvp ranking website and extreact class/spec by rank and plot a histo 
 import sys  # contains stderr object for debug output
 from lxml import html
 import requests
-import HistoData as HD
+import HistoData
+import wow_strings as wow
 
 # Changed remote:
 # repo name: "git remote set-url origin 'https://RusticusMax@bitbucket.org/RusticusMax/wow_player_histo.git'"
@@ -23,32 +24,16 @@ HISTO_HEIGHT = 20
 HISTO_TOP_X = 5
 # So how many players do we need to process
 PLAYER_MAX = HISTO_BAR_COUNT * HISTO_HEIGHT
-
-# Dictionary for counting classes
-H = HISTO_BAR_COUNT
-class_list = {
-    'Windwalker Monk': HD.HistoData(H),        'Holy Paladin': HD.HistoData(H),          'Frost Death Knight': HD.HistoData(H),
-    'Restoration Druid': HD.HistoData(H),      'Survival Hunter': HD.HistoData(H),       'Frost Mage': HD.HistoData(H),
-    'Restoration Shaman': HD.HistoData(H),     'Retribution Paladin': HD.HistoData(H),   'Shadow Priest': HD.HistoData(H),
-    'Arms Warrior': HD.HistoData(H),           'Elemental Shaman': HD.HistoData(H),      'Feral Druid': HD.HistoData(H),
-    'Balance Druid': HD.HistoData(H),          'Destruction Warlock': HD.HistoData(H),   'Affliction Warlock': HD.HistoData(H),
-    'Subtlety Rogue': HD.HistoData(H),         'Mistweaver Monk': HD.HistoData(H),       'Unholy Death Knight': HD.HistoData(H),
-    'Assassination Rogue': HD.HistoData(H),    'Protection Paladin': HD.HistoData(H),    'Discipline Priest': HD.HistoData(H),
-    'Enhancement Shaman': HD.HistoData(H),     'Arcane Mage': HD.HistoData(H),           'Demonology Warlock': HD.HistoData(H),
-    'Guardian Druid': HD.HistoData(H),         'Havoc Demon Hunter': HD.HistoData(H),    'Fire Mage': HD.HistoData(H),
-    'Marksmanship Hunter': HD.HistoData(H),    'Holy Priest': HD.HistoData(H),           'Outlaw Rogue': HD.HistoData(H),
-    'Beast Mastery Hunter': HD.HistoData(H),   'Protection Warrior': HD.HistoData(H),    'Blood Death Knight': HD.HistoData(H),
-    'Vengeance Demon Hunter': HD.HistoData(H), 'Fury Warrior': HD.HistoData(H),          'Brewmaster Monk': HD.HistoData(H),
-    'Preservation Evoker': HD.HistoData(H),    'Devastation Evoker': HD.HistoData(H),
-    }
-
 # Module level variable are always treated as constants, tell pylint to ignore const case requirement for the following
 # pylint: disable=C0103
 # create an array of dictionaries for histogram data
-# copy each (so we don't end up with an array of references) class_list dictionary for each histo bar
+# copy each (so we don't end up with an array of references) class_dict dictionary for each histo bar
 player_current = 0  # init current player counter so we will know when to stop
 page_count = 1  # So we can request the right page of data from web site, since we have to do it a page at a time.
 # pylint: enable=C0103
+
+# Build dictionary of counters
+class_dict = {name: HistoData.HistoData(HISTO_BAR_COUNT) for name in wow.wow_class_spec_names}
 
 # Read in a page and loop through all entries on the page and update counts
 while player_current < PLAYER_MAX:
@@ -62,7 +47,8 @@ while player_current < PLAYER_MAX:
     # extract player name, realm and charater class (stored in level field)
     players = tree.xpath('//div[@class="Character-name"]/text()')
     realms = tree.xpath('//div[@class="Character-realm"]/text()')
-    # How does this  extract the actual name, and not also the level number? Strip leading spaces
+    # How does this  extract the actual name, and not also the level number?
+    # Strip leading spaces
     player_class = [x.strip() for x in tree.xpath('//div[@class="Character-level"]/text()')]
 
     # did we get data?  If not skip. But track number of fails and exit if reached limit (BLANK_PAGE_CNT)
@@ -90,24 +76,24 @@ while player_current < PLAYER_MAX:
                     print()
                     print("Unicode Error on print", e.args)
                     sys.exit(2)
-            class_list[i_player_class].inc_cnt()
+            class_dict[i_player_class].inc_cnt()
             # inc appropriate histogram bucket
-            class_list[i_player_class].inc_bucket(int((player_current - 1) / HISTO_HEIGHT))
+            class_dict[i_player_class].inc_bucket(int((player_current - 1) / HISTO_HEIGHT))
     page_count += 1
 
 if DEBUG_OUT:
     print("player count", player_current)
 
 # Sort by class counts and print highest to lowest (excluding zero counts)
-for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[class_str].cnt(), reverse=True):
-    print(class_list[class_item].cnt(), ",", class_item)
-    if class_list[class_item].cnt() < 1:   # Don't bother to output class/spec with zero counts
+for class_item in sorted(class_dict.keys(), key=lambda class_str: class_dict[class_str].cnt(), reverse=True):
+    print(class_dict[class_item].cnt(), ",", class_item)
+    if class_dict[class_item].cnt() < 1:   # Don't bother to output class/spec with zero counts
         break
 
 # Dump histogram data
 # creat list of top n classes,  We use it in the loop
 histo_top_classes = []
-for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[class_str].cnt(), reverse=True):
+for class_item in sorted(class_dict.keys(), key=lambda class_str: class_dict[class_str].cnt(), reverse=True):
     histo_top_classes.append(class_item)
     if len(histo_top_classes) >= HISTO_TOP_X:
         break
@@ -123,5 +109,5 @@ for i in range(HISTO_BAR_COUNT):
     print((i * HISTO_HEIGHT) + 1, " ", (i + 1) * HISTO_HEIGHT, ',', end='')
     # Print counts for this tier for top overall classes
     for histo_item in histo_top_classes:
-        print(class_list[histo_item].bucket(i), ',', end='')
+        print(class_dict[histo_item].bucket(i), ',', end='')
     print()  # end of line
