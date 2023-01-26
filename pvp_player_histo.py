@@ -25,21 +25,22 @@ HISTO_TOP_X = 5
 PLAYER_MAX = HISTO_BAR_COUNT * HISTO_HEIGHT
 
 # Dictionary for counting classes
-
-class_list = {'Windwalker Monk': HD.HistoData(H),        'Holy Paladin': HD.HistoData(H),          'Frost Death Knight': HD.HistoData(H),
-              'Restoration Druid': HD.HistoData(H),      'Survival Hunter': HD.HistoData(H),       'Frost Mage': HD.HistoData(H),
-              'Restoration Shaman': HD.HistoData(H),     'Retribution Paladin': HD.HistoData(H),   'Shadow Priest': HD.HistoData(H),
-              'Arms Warrior': HD.HistoData(H),           'Elemental Shaman': HD.HistoData(H),      'Feral Druid': HD.HistoData(H),
-              'Balance Druid': HD.HistoData(H),          'Destruction Warlock': HD.HistoData(H),   'Affliction Warlock': HD.HistoData(H),
-              'Subtlety Rogue': HD.HistoData(H),         'Mistweaver Monk': HD.HistoData(H),       'Unholy Death Knight': HD.HistoData(H),
-              'Assassination Rogue': HD.HistoData(H),    'Protection Paladin': HD.HistoData(H),    'Discipline Priest': HD.HistoData(H),
-              'Enhancement Shaman': HD.HistoData(H),     'Arcane Mage': HD.HistoData(H),           'Demonology Warlock': HD.HistoData(H),
-              'Guardian Druid': HD.HistoData(H),         'Havoc Demon Hunter': HD.HistoData(H),    'Fire Mage': HD.HistoData(H),
-              'Marksmanship Hunter': HD.HistoData(H),    'Holy Priest': HD.HistoData(H),           'Outlaw Rogue': HD.HistoData(H),
-              'Beast Mastery Hunter': HD.HistoData(H),   'Protection Warrior': HD.HistoData(H),    'Blood Death Knight': HD.HistoData(H),
-              'Vengeance Demon Hunter': HD.HistoData(H), 'Fury Warrior': HD.HistoData(H),          'Brewmaster Monk': HD.HistoData(H),
-              'Preservation Evoker': HD.HistoData(H),    'Devastation Evoker': HD.HistoData(H),
-              }
+H = HISTO_BAR_COUNT
+class_list = {
+    'Windwalker Monk': HD.HistoData(H),        'Holy Paladin': HD.HistoData(H),          'Frost Death Knight': HD.HistoData(H),
+    'Restoration Druid': HD.HistoData(H),      'Survival Hunter': HD.HistoData(H),       'Frost Mage': HD.HistoData(H),
+    'Restoration Shaman': HD.HistoData(H),     'Retribution Paladin': HD.HistoData(H),   'Shadow Priest': HD.HistoData(H),
+    'Arms Warrior': HD.HistoData(H),           'Elemental Shaman': HD.HistoData(H),      'Feral Druid': HD.HistoData(H),
+    'Balance Druid': HD.HistoData(H),          'Destruction Warlock': HD.HistoData(H),   'Affliction Warlock': HD.HistoData(H),
+    'Subtlety Rogue': HD.HistoData(H),         'Mistweaver Monk': HD.HistoData(H),       'Unholy Death Knight': HD.HistoData(H),
+    'Assassination Rogue': HD.HistoData(H),    'Protection Paladin': HD.HistoData(H),    'Discipline Priest': HD.HistoData(H),
+    'Enhancement Shaman': HD.HistoData(H),     'Arcane Mage': HD.HistoData(H),           'Demonology Warlock': HD.HistoData(H),
+    'Guardian Druid': HD.HistoData(H),         'Havoc Demon Hunter': HD.HistoData(H),    'Fire Mage': HD.HistoData(H),
+    'Marksmanship Hunter': HD.HistoData(H),    'Holy Priest': HD.HistoData(H),           'Outlaw Rogue': HD.HistoData(H),
+    'Beast Mastery Hunter': HD.HistoData(H),   'Protection Warrior': HD.HistoData(H),    'Blood Death Knight': HD.HistoData(H),
+    'Vengeance Demon Hunter': HD.HistoData(H), 'Fury Warrior': HD.HistoData(H),          'Brewmaster Monk': HD.HistoData(H),
+    'Preservation Evoker': HD.HistoData(H),    'Devastation Evoker': HD.HistoData(H),
+    }
 
 # Module level variable are always treated as constants, tell pylint to ignore const case requirement for the following
 # pylint: disable=C0103
@@ -64,7 +65,7 @@ while player_current < PLAYER_MAX:
     # How does this  extract the actual name, and not also the level number? Strip leading spaces
     player_class = [x.strip() for x in tree.xpath('//div[@class="Character-level"]/text()')]
 
-    # did we get data?  If not skip. But track number of fail and exit if reached limit (BLANK_PAGE_CNT)
+    # did we get data?  If not skip. But track number of fails and exit if reached limit (BLANK_PAGE_CNT)
     if len(players) == 0:
         # if we reached the allowed blank page count exit with error
         if BLANK_PAGE_CNT <= 0:
@@ -91,7 +92,6 @@ while player_current < PLAYER_MAX:
                     sys.exit(2)
             class_list[i_player_class].inc_cnt()
             # inc appropriate histogram bucket
-#            histo_dict[i_player_class][int((player_current - 1) / HISTO_HEIGHT)] += 1
             class_list[i_player_class].inc_bucket(int((player_current - 1) / HISTO_HEIGHT))
     page_count += 1
 
