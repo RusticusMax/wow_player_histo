@@ -10,35 +10,39 @@ import requests
 # repo name: "git remote set-url origin 'https://RusticusMax@bitbucket.org/RusticusMax/wow_player_histo.git'"
 # Variables
 # Debug flag.  Set to non zero for debug
-DEBUG_OUT=1
+DEBUG_OUT = 1
 # Number of blank pages (no data) to allow.  1 should really be sufficient
-BLANK_PAGE_CNT=5
-# Number of players to process
-PLAYER_MAX=500
-# number of histogram bars
-HISTO_BAR_COUNT=25
+BLANK_PAGE_CNT = 5
+# number of histogram bars (X of graph)
+HISTO_BAR_COUNT = 25
+# Number of players per bucket (max Y)
+HISTO_HEIGHT = 20
 # Only include data for the top n classes in histogram to reduce noise in graph
-HISTO_TOP_X=5
+HISTO_TOP_X = 5
 
-# Number of players to count for each histogram bucket dictionary
-HISTO_WIDTH=int(PLAYER_MAX/HISTO_BAR_COUNT)
-
+# So how many players do we need to process
+PLAYER_MAX = HISTO_BAR_COUNT * HISTO_HEIGHT
 
 # Dictionary for counting classes
-class_list = { ' Windwalker Monk': 0,        ' Holy Paladin': 0,          ' Frost Death Knight': 0,
-               ' Restoration Druid': 0,      ' Survival Hunter': 0,       ' Frost Mage': 0,
-               ' Restoration Shaman': 0,     ' Retribution Paladin': 0,   ' Shadow Priest': 0,
-               ' Arms Warrior': 0,           ' Elemental Shaman': 0,      ' Feral Druid': 0,
-               ' Balance Druid': 0,          ' Destruction Warlock': 0,   ' Affliction Warlock': 0,
-               ' Subtlety Rogue': 0,         ' Mistweaver Monk': 0,       ' Unholy Death Knight': 0,
-               ' Assassination Rogue': 0,    ' Protection Paladin': 0,    ' Discipline Priest': 0,
-               ' Enhancement Shaman': 0,     ' Arcane Mage': 0,           ' Demonology Warlock': 0,
-               ' Guardian Druid': 0,         ' Havoc Demon Hunter': 0,    ' Fire Mage': 0,
-               ' Marksmanship Hunter': 0,    ' Holy Priest': 0,           ' Outlaw Rogue': 0,
-               ' Beast Mastery Hunter': 0,   ' Protection Warrior': 0,    ' Blood Death Knight': 0,
-               ' Vengeance Demon Hunter': 0, ' Fury Warrior': 0,          ' Brewmaster Monk': 0,
-               ' Preservation Evoker': 0,    ' Devastation Evoker': 0,
-               }
+class_list = {' Windwalker Monk': 0,        ' Holy Paladin': 0,          ' Frost Death Knight': 0,
+              ' Restoration Druid': 0,      ' Survival Hunter': 0,       ' Frost Mage': 0,
+              ' Restoration Shaman': 0,     ' Retribution Paladin': 0,   ' Shadow Priest': 0,
+              ' Arms Warrior': 0,           ' Elemental Shaman': 0,      ' Feral Druid': 0,
+              ' Balance Druid': 0,          ' Destruction Warlock': 0,   ' Affliction Warlock': 0,
+              ' Subtlety Rogue': 0,         ' Mistweaver Monk': 0,       ' Unholy Death Knight': 0,
+              ' Assassination Rogue': 0,    ' Protection Paladin': 0,    ' Discipline Priest': 0,
+              ' Enhancement Shaman': 0,     ' Arcane Mage': 0,           ' Demonology Warlock': 0,
+              ' Guardian Druid': 0,         ' Havoc Demon Hunter': 0,    ' Fire Mage': 0,
+              ' Marksmanship Hunter': 0,    ' Holy Priest': 0,           ' Outlaw Rogue': 0,
+              ' Beast Mastery Hunter': 0,   ' Protection Warrior': 0,    ' Blood Death Knight': 0,
+              ' Vengeance Demon Hunter': 0, ' Fury Warrior': 0,          ' Brewmaster Monk': 0,
+              ' Preservation Evoker': 0,    ' Devastation Evoker': 0,
+              }
+
+# todo: switch to this so we don't need parallel dictionaries
+# test_dict = { ' Windwalker Monk': [0] * HISTO_HEIGHT,        ' Holy Paladin': [0] * HISTO_HEIGHT,
+#               ' Frost Death Knight': [0] * HISTO_HEIGHT, }
+# test_dict[' Windwalker Monk'][2] = 7
 
 # todo:    create clear list objects to better handle parallel dictionaries
 #  , or A dictionary of lists HISTO_BAR_COUNT wide   " class spec": list[
@@ -96,38 +100,38 @@ while player_current < PLAYER_MAX:
                     oops = e
             class_list[i_player_class] += 1
             # inc appropriate histogram bucket
-            histo_buckets[int((player_current - 1) / HISTO_WIDTH)][i_player_class] += 1
+            histo_buckets[int((player_current - 1) / HISTO_HEIGHT)][i_player_class] += 1
 
     page_count += 1
 
 if DEBUG_OUT:
     print("player count", player_current)
 
-# Sort by class counts and print highest to lowest
+# Sort by class counts and print highest to lowest (excluding zero counts)
 for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[class_str], reverse=True):
-    if class_list[class_item] > 0:
-        print(class_list[class_item], ",", class_item)
+    print(class_list[class_item], ",", class_item)
+    if class_list[class_item] < 1:   # Don't bother to output class/spec with zero counts
+        break
 
 # Dump histogram data
-# creat list of top n classes
+# creat list of top n classes,  We use it in the loop
 histo_top_classes = []
 for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[class_str], reverse=True):
-    if len(histo_top_classes) < HISTO_TOP_X:
-        histo_top_classes.append(class_item)
+    histo_top_classes.append(class_item)
+    if len(histo_top_classes) >= HISTO_TOP_X:
+        break
 
-# header (may need to sort to ensure each dictionary is ordered the same)
-# ATM each run has differnt order, but same for each dictionary in any run)
+# Output header
 print("Rank", ',', end='')
-# for histo_item in histo_buckets[0]:
 for histo_item in histo_top_classes:
     print(histo_item, ',', end='')
-print()
+print()  # And a newline to end
 
 # Print actual histogram data
 # for each dictionary in the array process that batch of counts
 for i, histo_bar in enumerate(histo_buckets):
     # Print left legend for bucket ranges (e.g. 0-20, 21-40, etc)
-    print((i * HISTO_WIDTH) + 1, " ", (i + 1) * HISTO_WIDTH, ',', end='')
+    print((i * HISTO_HEIGHT) + 1, " ", (i + 1) * HISTO_HEIGHT, ',', end='')
     for histo_item in histo_top_classes:
         print(histo_bar[histo_item],  ',', end='')
     print()     # end of line
