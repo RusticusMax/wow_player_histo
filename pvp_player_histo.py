@@ -25,22 +25,23 @@ HISTO_WIDTH=int(PLAYER_MAX/HISTO_BAR_COUNT)
 
 
 # Dictionary for counting classes
-class_list = { " Windwalker Monk":0,        " Holy Paladin":0,          " Frost Death Knight":0,
-               " Restoration Druid":0,      " Survival Hunter":0,       " Frost Mage":0,
-               " Restoration Shaman":0,     " Retribution Paladin":0,   " Shadow Priest":0,
-               " Arms Warrior":0,           " Elemental Shaman":0,      " Feral Druid":0,
-               " Balance Druid":0,          " Destruction Warlock":0,   " Affliction Warlock":0,
-               " Subtlety Rogue":0,         " Mistweaver Monk":0,       " Unholy Death Knight":0,
-               " Assassination Rogue":0,    " Protection Paladin":0,    " Discipline Priest":0,
-               " Enhancement Shaman":0,     " Arcane Mage":0,           " Demonology Warlock":0,
-               " Guardian Druid":0,         " Havoc Demon Hunter":0,    " Fire Mage":0,
-               " Marksmanship Hunter":0,    " Holy Priest":0,           " Outlaw Rogue":0,
-               " Beast Mastery Hunter":0,   " Protection Warrior":0,    " Blood Death Knight":0,
-               " Vengeance Demon Hunter":0, " Fury Warrior":0,          " Brewmaster Monk":0,
-               " Preservation Evoker":0,    " Devastation Evoker":0,
+class_list = { ' Windwalker Monk': 0,        ' Holy Paladin': 0,          ' Frost Death Knight': 0,
+               ' Restoration Druid': 0,      ' Survival Hunter': 0,       ' Frost Mage': 0,
+               ' Restoration Shaman': 0,     ' Retribution Paladin': 0,   ' Shadow Priest': 0,
+               ' Arms Warrior': 0,           ' Elemental Shaman': 0,      ' Feral Druid': 0,
+               ' Balance Druid': 0,          ' Destruction Warlock': 0,   ' Affliction Warlock': 0,
+               ' Subtlety Rogue': 0,         ' Mistweaver Monk': 0,       ' Unholy Death Knight': 0,
+               ' Assassination Rogue': 0,    ' Protection Paladin': 0,    ' Discipline Priest': 0,
+               ' Enhancement Shaman': 0,     ' Arcane Mage': 0,           ' Demonology Warlock': 0,
+               ' Guardian Druid': 0,         ' Havoc Demon Hunter': 0,    ' Fire Mage': 0,
+               ' Marksmanship Hunter': 0,    ' Holy Priest': 0,           ' Outlaw Rogue': 0,
+               ' Beast Mastery Hunter': 0,   ' Protection Warrior': 0,    ' Blood Death Knight': 0,
+               ' Vengeance Demon Hunter': 0, ' Fury Warrior': 0,          ' Brewmaster Monk': 0,
+               ' Preservation Evoker': 0,    ' Devastation Evoker': 0,
                }
 
-# todo:    create clear list objects to better handle paralle arrays
+# todo:    create clear list objects to better handle parallel dictionaries
+#  , or A dictionary of lists HISTO_BAR_COUNT wide   " class spec": list[
 
 # Module level variable are always treated as constants, tell pylint to ignore const case requirement for the following
 # pylint: disable=C0103
@@ -109,7 +110,7 @@ for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[cla
 
 # Dump histogram data
 # creat list of top n classes
-histo_top_classes=[]
+histo_top_classes = []
 for class_item in sorted(class_list.keys(), key=lambda class_str: class_list[class_str], reverse=True):
     if len(histo_top_classes) < HISTO_TOP_X:
         histo_top_classes.append(class_item)
