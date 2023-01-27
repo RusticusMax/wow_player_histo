@@ -2,8 +2,13 @@
 Scrape Wow pvp ranking website and extreact class/spec by rank and plot a histo of it
 """
 import sys  # contains stderr object for debug output
+
+import matplotlib.pyplot
 from lxml import html
 import requests
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import HistoData
 import wow_strings as wow
 
@@ -19,11 +24,11 @@ CNTR = 0
 # number of histogram bars (X of graph)
 HISTO_BAR_COUNT = 25
 # Number of players per bucket (max Y)
-HISTO_HEIGHT = 20
+HISTO_WIDTH = 20
 # Only include data for the top n classes in histogram to reduce noise in graph
 HISTO_TOP_X = 5
 # So how many players do we need to process
-PLAYER_MAX = HISTO_BAR_COUNT * HISTO_HEIGHT
+PLAYER_MAX = HISTO_BAR_COUNT * HISTO_WIDTH
 # Module level variable are always treated as constants, tell pylint to ignore const case requirement for the following
 # pylint: disable=C0103
 # create an array of dictionaries for histogram data
@@ -78,7 +83,7 @@ while player_current < PLAYER_MAX:
                     sys.exit(2)
             class_dict[i_player_class].inc_cnt()
             # inc appropriate histogram bucket
-            class_dict[i_player_class].inc_bucket(int((player_current - 1) / HISTO_HEIGHT))
+            class_dict[i_player_class].inc_bucket(int((player_current - 1) / HISTO_WIDTH))
     page_count += 1
 
 if DEBUG_OUT:
@@ -104,10 +109,21 @@ for class_item in histo_top_classes:
     print(class_item, ',', end='')
 print()  # And a newline to end
 
+
 for i in range(HISTO_BAR_COUNT):
     # Print left legend for bucket ranges (e.g. 0-20, 21-40, etc)
-    print((i * HISTO_HEIGHT) + 1, " ", (i + 1) * HISTO_HEIGHT, ',', end='')
+    print((i * HISTO_WIDTH) + 1, " ", (i + 1) * HISTO_WIDTH, ',', end='')
     # Print counts for this tier for top overall classes
     for histo_item in histo_top_classes:
         print(class_dict[histo_item].bucket(i), ',', end='')
     print()  # end of line
+
+pd_list = []
+line_styles = ["--", "o", "^", "s", "k"]
+for i, histo_item in enumerate(histo_top_classes):
+    plt.plot(range(0, PLAYER_MAX, HISTO_WIDTH), class_dict[histo_item].buckets(), line_styles[i])
+    #pd_list.append([histo_item] + class_dict[histo_item].buckets())
+    #plt.bar(range(0, PLAYER_MAX, HISTO_WIDTH), class_dict[histo_item].buckets(), bottom=last_plot)
+#df = pd.DataFrame(pd_list)
+plt.legend(histo_top_classes, loc=0, frameon=True)
+plt.show()

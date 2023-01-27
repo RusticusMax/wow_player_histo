@@ -18,6 +18,9 @@ class HistoData:
         self.chk_idx(idx)
         return self.m_buckets[idx]
 
+    def buckets(self):
+        return self.m_buckets
+
     def inc_bucket(self, idx: int):
         self.chk_idx(idx)
         self.m_buckets[idx] += 1
