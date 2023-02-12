@@ -18,7 +18,7 @@ import wow_strings as wow
 # Debug flag.  Set to non zero for debug
 DEBUG_OUT = 1
 # Number of blank pages (no data) to allow.  1 should really be sufficient
-BLANK_PAGE_CNT = 5
+BLANK_PAGE_MAX = 5
 # Index for counter bucket
 CNTR = 0
 # number of histogram bars (X of graph)
@@ -35,9 +35,10 @@ PLAYER_MAX = HISTO_BAR_COUNT * HISTO_WIDTH
 # copy each (so we don't end up with an array of references) class_dict dictionary for each histo bar
 player_current = 0  # init current player counter so we will know when to stop
 page_count = 1  # So we can request the right page of data from web site, since we have to do it a page at a time.
+blank_page_cnt = 0  # Track the number of pages that returned no data
 # pylint: enable=C0103
 
-# Build dictionary of counters
+# Build dictionary of Histogram counter objects.  One for each class
 class_dict = {name: HistoData.HistoData(HISTO_BAR_COUNT) for name in wow.wow_class_spec_names}
 
 # Read in a page and loop through all entries on the page and update counts
@@ -53,17 +54,16 @@ while player_current < PLAYER_MAX:
     players = tree.xpath('//div[@class="Character-name"]/text()')
     realms = tree.xpath('//div[@class="Character-realm"]/text()')
     # How does this  extract the actual name, and not also the level number?
-    # Strip leading spaces
+    # Now strip leading spaces
     player_class = [x.strip() for x in tree.xpath('//div[@class="Character-level"]/text()')]
 
-    # did we get data?  If not skip. But track number of fails and exit if reached limit (BLANK_PAGE_CNT)
+    # Did we get player data? If we didn't try again. But track number of fails and exit if reached limit (BLANK_PAGE_CNT)
     if len(players) == 0:
         # if we reached the allowed blank page count exit with error
-        if BLANK_PAGE_CNT <= 0:
-            print("BLANK_PAGE_CNT reached limit.  Exiting")
+        blank_page_cnt += 1
+        if blank_page_cnt >= BLANK_PAGE_MAX:
+            print(f"BLANK_PAGE_MAX({BLANK_PAGE_MAX}) reached limit.  Exiting")
             sys.exit(1)
-        else:
-            BLANK_PAGE_CNT -= 1
         break
     # for each element of data on this page process it.
     for i, (i_player, i_player_class, i_realm) in enumerate(zip(players, player_class, realms)):
